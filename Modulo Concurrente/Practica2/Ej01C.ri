@@ -1,0 +1,78 @@
+programa Ej01
+procesos
+  proceso  juntarFlores (ES cantFlores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:= cantFlores + 1
+  fin
+  proceso recorrerCa (ES cantFlores:numero)
+  comenzar
+    repetir 9
+      juntarFlores(cantFlores)
+      mover
+    juntarFlores(cantFlores)
+  fin
+  proceso maximo(ES max:numero; ES maxR:numero; E floresAct:numero; E rAct:numero)
+  comenzar
+    si floresAct > max
+      max:=floresAct
+      maxR:=rAct
+  fin
+areas
+  area1: AreaP (1,1,1,10)
+  area2: AreaP (2,11,2,20)
+  area3: AreaP (3,21,3,30)
+  area4: AreaP (4,31,4,40)
+  area5: AreaP (5,41,5,50)
+  area6: AreaP (6,51,6,60)
+  areaF: AreaP (2,1,2,1)
+robots
+  robot bot
+  variables
+    cantFlores:numero soy:numero 
+  comenzar  
+    cantFlores:=0 
+    soy:=0
+    recorrerCa(cantFlores)
+    RecibirMensaje(soy,rF)
+    EnviarMensaje(soy,rF)
+    EnviarMensaje(cantFlores,rF) 
+  fin
+  robot robotFiscal
+  variables
+    cantFlores:numero quien:numero max:numero maxR:numero
+  comenzar
+    max:=0 
+    maxR:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    EnviarMensaje(5,r5)
+    EnviarMensaje(6,r6)
+    repetir 6
+      RecibirMensaje(quien,*)
+      RecibirMensaje(cantFlores,*)
+      maximo(max,maxR,cantFlores,quien)
+    Informar('Gano',maxR)
+    Informar('ConCantFlores',max)  
+  fin
+variables
+  r1:bot r2:bot r3:bot r4:bot r5:bot r6:bot rF: robotFiscal
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r3,area3)
+  AsignarArea(r4,area4)
+  AsignarArea(r5,area5)
+  AsignarArea(r6,area6)
+  AsignarArea(rF,areaF)
+  Iniciar(rF,2,1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+  Iniciar(r3,3,21)
+  Iniciar(r4,4,31)
+  Iniciar(r5,5,41)
+  Iniciar(r6,6,51)
+fin    
