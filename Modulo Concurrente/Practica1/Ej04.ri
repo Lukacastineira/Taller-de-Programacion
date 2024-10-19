@@ -1,0 +1,79 @@
+programa Ej04
+procesos
+  proceso juntarPapeles 
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso juntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso recorrerPar
+  variables
+    av:numero
+  comenzar
+    av:=PosAv
+    repetir 24
+      repetir 99
+        juntarPapeles
+        mover
+      juntarPapeles
+      av:=av+1
+      Pos(av,1)
+    repetir 99
+      juntarPapeles
+      mover
+    juntarPapeles     
+  fin
+  proceso recorrerImpar 
+  variables
+    av:numero
+  comenzar
+    av:= PosAv
+    repetir 24
+      repetir 99
+        juntarFlores
+        mover
+      juntarFlores
+      av:=av+1
+      Pos(av,1)
+    repetir 99
+      juntarFlores
+      mover
+    juntarFlores
+  fin
+areas
+  area1: AreaP(1,1,25,100)
+  area2: AreaP(26,1,50,100)
+  area3: AreaP(51,1,75,100)
+  area4: AreaP(76,1,100,100)
+robots
+  robot robotImpar
+  comenzar
+    recorrerImpar
+    Pos(PosAv+26,1)
+    recorrerImpar
+  fin
+  robot robotPar
+  comenzar
+    recorrerPar
+    Pos(PosAv+26,1)
+    recorrerPar
+  fin
+variables
+  botPar:robotPar
+  botImpar:robotImpar
+comenzar
+  AsignarArea(botImpar,area1)
+  AsignarArea(botPar,area2)
+  AsignarArea(botImpar,area3)
+  AsignarArea(botPar,area4)
+  Iniciar(botImpar,1,1)
+  Iniciar(botPar,26,1)
+fin
+  
+  
+  
+  
