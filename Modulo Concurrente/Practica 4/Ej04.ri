@@ -1,0 +1,95 @@
+programa Ej04
+procesos
+  proceso  juntarFlores 
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso  juntarPapeles 
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso vaciarBolsa
+  comenzar
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+areas
+  areaJ: AreaP(1,1,1,1)
+  areaT1: AreaP(2,1,2,1)
+  areaT2: AreaP(3,1,3,1)
+  areaTrabajo:AreaPC(2,2,100,100)
+robots
+  robot trabajador
+  variables
+    av:numero ca:numero tarea:numero miAv:numero miCa:numero
+  comenzar
+    tarea:=0
+    miAv:=PosAv
+    miCa:=PosCa
+    mientras (tarea<>4)
+      RecibirMensaje(tarea,rJ)
+      si(tarea <> 4)
+        RecibirMensaje(av,rJ)
+        RecibirMensaje(ca,rJ)
+      si (tarea=1)
+        BloquearEsquina(av,ca)
+        Pos(av,ca)
+        juntarFlores
+        Pos(miAv,miCa)
+        LiberarEsquina(av,ca)
+        EnviarMensaje(V,rJ)
+      sino
+        si (tarea=2)
+          BloquearEsquina(av,ca)
+          Pos(av,ca)
+          juntarPapeles
+          Pos(miAv,miCa)
+          LiberarEsquina(av,ca)
+          EnviarMensaje(V,rJ)
+        sino 
+          si (tarea=3)
+            BloquearEsquina(av,ca)
+            Pos(av,ca)
+            vaciarBolsa
+            Pos(miAv,miCa)
+            LiberarEsquina(av,ca)
+            EnviarMensaje(V,rJ)
+  fin
+  robot jefe
+  variables
+    av:numero ca:numero tarea:numero trabajador:numero seguir:boolean
+  comenzar
+    repetir 10
+      Random(trabajador,1,2)
+      Random(av,2,100)
+      Random(ca,2,100)
+      Random(tarea,1,3)
+      si (trabajador=1)
+        EnviarMensaje(tarea,t1)
+        EnviarMensaje(av,t1)
+        EnviarMensaje(ca,t1)
+      sino
+        EnviarMensaje(tarea,t2)
+        EnviarMensaje(av,t2)
+        EnviarMensaje(ca,t2)
+      RecibirMensaje(seguir,*)
+    EnviarMensaje(4,t1)
+    EnviarMensaje(4,t2)
+  fin
+variables
+  t1,t2:trabajador
+  rJ:jefe
+comenzar
+  AsignarArea(t1,areaT1)
+  AsignarArea(t2,areaT2)
+  AsignarArea(t1,areaTrabajo)
+  AsignarArea(t2,areaTrabajo)
+  AsignarArea(rJ,areaJ)
+  Iniciar(rJ,1,1)
+  Iniciar(t1,2,1)
+  Iniciar(t2,3,1) 
+fin   

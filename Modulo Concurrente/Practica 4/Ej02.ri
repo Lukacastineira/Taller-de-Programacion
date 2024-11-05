@@ -1,0 +1,94 @@
+programa Ej02
+procesos
+  proceso juntarPapeles (ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1
+  fin
+  proceso  depositarEsquina 
+  variables
+    ca:numero av:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir 5
+      depositarPapel
+    Pos(av,ca)
+    LiberarEsquina(50,50)   
+  fin
+  proceso recorrerAvenida 
+  variables
+    cant:numero
+  comenzar
+    cant:=0
+    mientras(PosCa<100)
+      juntarPapeles(cant)
+      mover
+      si(cant =5)
+        depositarEsquina
+        cant:=0
+    juntarPapeles(cant)
+    si (cant=5)
+      depositarEsquina   
+  fin
+  proceso recogerPapel 
+  variables
+    cant:numero cantReales:numero av:numero ca:numero veces:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    veces:=0
+    mientras (veces < 8)
+      Random(cant,2,5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      mientras(HayPapelEnLaEsquina)&(cantReales<cant)
+        tomarPapel
+        cantReales:=cantReales+1
+      si(cantReales<cant)
+        repetir cantReales
+          depositarPapel
+        veces := veces + 1
+      Pos(av,ca)
+      LiberarEsquina(50,50)
+      si (cantReales = cant)
+        repetir cantReales
+          depositarPapel
+        veces:=0  
+  fin
+areas
+  areaC: AreaPC(50,50,50,50)
+  areaP1:AreaP(5,1,5,100)
+  areaP2:AreaP(10,1,10,100)
+  areaC1:AreaP(11,1,11,1)
+  areaC2:AreaP(12,1,12,1)
+robots
+  robot productor
+  comenzar
+    recorrerAvenida
+  fin
+  robot consumidor
+  comenzar
+    recogerPapel
+  fin
+variables
+  rC1,rC2:consumidor 
+  rP1,rP2:productor
+comenzar
+  AsignarArea(rC1,areaC)
+  AsignarArea(rC1,areaC1)
+  AsignarArea(rC2,areaC)
+  AsignarArea(rC2,areaC2)
+  AsignarArea(rP1,areaC)
+  AsignarArea(rP1,areaP1)
+  AsignarArea(rP2,areaC)  
+  AsignarArea(rP2,areaP2) 
+  Iniciar(rP1,5,1)
+  Iniciar(rP2,10,1)
+  Iniciar(rC1,11,1)
+  Iniciar(rC2,12,1)
+fin
+  

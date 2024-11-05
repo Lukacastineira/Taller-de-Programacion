@@ -1,0 +1,251 @@
+programa Ej06
+procesos
+  proceso juntarFlores 
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso juntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso depositarNecesario
+  comenzar
+    mientras ((PosCa < 100) & (HayPapelEnLaBolsa)|(HayFlorEnLaBolsa))
+      si(HayFlorEnLaBolsa)
+        depositarFlor
+      si(HayPapelEnLaBolsa)
+        depositarPapel
+      mover
+  fin
+areas
+  areaP: AreaPC (2,2,15,15)
+  areaCarrera: AreaPC (1,20,100,22)
+  areaF: AreaP (1,1,1,1)
+robots
+  robot botJuntador1
+  variables
+    calle:numero
+  comenzar
+    Pos(2,2)
+    repetir 5
+      juntarFlores
+      mover
+    juntarFlores
+    derecha
+    repetir 2
+      juntarFlores
+      mover
+    juntarFlores
+    BloquearEsquina(5,7)
+    mover
+    juntarFlores
+    mover
+    LiberarEsquina(5,7)
+    juntarFlores
+    mover
+    juntarFlores
+    derecha
+    mover
+    juntarFlores
+    BloquearEsquina(7,5)
+    mover
+    juntarFlores
+    mover
+    LiberarEsquina(7,5)
+    juntarFlores
+    repetir 2
+      juntarFlores
+      mover
+    derecha
+    repetir 5
+      juntarFlores
+      mover
+    repetir 2
+      derecha
+    EnviarMensaje(1,rF)
+    RecibirMensaje(calle,rF)
+    Pos(1,calle)
+    depositarNecesario
+  fin
+  robot botJuntador2
+  variables
+    calle:numero
+  comenzar
+    Pos(5,5)
+    juntarFlores
+    juntarPapeles
+    BloquearEsquina(5,7)
+    mover
+    juntarFlores
+    juntarPapeles
+    mover
+    LiberarEsquina(5,7)
+    juntarFlores
+    juntarPapeles
+    repetir 7
+      juntarFlores
+      juntarPapeles
+      mover
+    juntarFlores
+    juntarPapeles
+    derecha
+    repetir 3
+      juntarFlores
+      juntarPapeles
+      mover
+    juntarFlores
+    juntarPapeles
+    BloquearEsquina (9,14)
+    mover
+    juntarFlores
+    juntarPapeles
+    mover
+    LiberarEsquina(9,14)
+    juntarFlores
+    juntarPapeles
+    repetir 4
+      juntarFlores
+      juntarPapeles
+      mover
+    juntarFlores
+    juntarPapeles
+    derecha
+    repetir 4
+      juntarFlores
+      juntarPapeles
+      mover
+    juntarFlores
+    juntarPapeles
+    BloquearEsquina(14,9)
+    mover
+    juntarFlores
+    juntarPapeles
+    mover
+    LiberarEsquina(14,9)
+    juntarFlores
+    juntarPapeles
+    repetir 3
+      juntarFlores
+      juntarPapeles
+      mover
+    juntarFlores
+    juntarPapeles
+    derecha
+    repetir 6
+      juntarFlores
+      juntarPapeles
+      mover
+    juntarFlores
+    juntarPapeles
+    BloquearEsquina(7,5)
+    mover
+    juntarFlores
+    juntarPapeles
+    mover
+    LiberarEsquina(7,5)
+    juntarFlores
+    juntarPapeles
+    mover
+    repetir 2
+      derecha
+    EnviarMensaje(2,rF)
+    RecibirMensaje(calle,rF)
+    Pos(1,calle)
+    depositarNecesario    
+  fin
+  robot botJuntador3
+  variables
+    calle:numero
+  comenzar
+    repetir 3
+      juntarPapeles
+      mover
+    juntarPapeles
+    BloquearEsquina(9,14)
+    mover
+    juntarPapeles
+    mover
+    LiberarEsquina(9,14)
+    juntarPapeles
+    mover
+    juntarPapeles
+    derecha
+    repetir 6
+      juntarPapeles
+      mover
+    juntarPapeles
+    derecha
+    repetir 6
+      juntarPapeles
+      mover
+    juntarPapeles
+    derecha
+    BloquearEsquina(14,9)
+    mover
+    juntarPapeles
+    mover
+    LiberarEsquina(14,9)
+    juntarPapeles
+    repetir 4
+      juntarPapeles
+      mover
+    juntarPapeles
+    repetir 2
+      derecha
+    EnviarMensaje(3,rF)
+    RecibirMensaje(calle,rF)
+    Pos(1,calle)
+    depositarNecesario
+  fin
+  robot botFiscalizador
+  variables
+    id:numero calle:numero
+  comenzar
+    calle:=20
+    repetir 3
+      RecibirMensaje(id,*)
+      si (id=1)
+        EnviarMensaje(calle,r1)
+      sino 
+        si(id=2)
+          EnviarMensaje(calle,r2)
+        sino
+          EnviarMensaje(calle,r3)
+      calle:=calle+1
+  fin
+variables
+  r1:botJuntador1
+  r2:botJuntador2
+  r3:botJuntador3
+  rF:botFiscalizador
+comenzar
+  AsignarArea(r1,areaP)
+  AsignarArea(r1,areaCarrera)
+  AsignarArea(r2,areaP)
+  AsignarArea(r2,areaCarrera)
+  AsignarArea(r3,areaP)
+  AsignarArea(r3,areaCarrera)
+  AsignarArea(rF,areaF)
+  Iniciar(rF,1,1)
+  Iniciar(r1,2,2)
+  Iniciar(r2,5,5)
+  Iniciar(r3,9,9)
+  
+fin
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

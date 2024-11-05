@@ -1,0 +1,82 @@
+programa Ej05
+procesos
+  proceso juntarPapeles (E cant:numero)
+  comenzar
+    repetir cant
+      tomarPapel
+  fin
+  proceso depositarPapeles (E cant:numero)
+  comenzar
+    repetir cant
+      depositarPapel
+  fin
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+areas
+  area1: AreaP(10,1,10,1)
+  area2: AreaP(11,1,11,1)
+  area3: AreaP(12,1,12,1)
+  areaS: AreaP(13,1,13,1)
+  areaC: AreaPC(100,1,100,1)
+robots
+  robot  cliente
+  variables
+    id:numero cant:numero miAv:numero miCa:numero
+  comenzar
+    RecibirMensaje(id,rS)
+    miAv:=PosAv
+    miCa:=PosCa
+    repetir 4
+      EnviarMensaje(id,rS)
+      RecibirMensaje(cant,rS)
+      BloquearEsquina(100,1)
+      Pos(100,1)
+      juntarPapeles(cant)
+      Pos(miAv,miCa)
+      LiberarEsquina(100,1)
+      depositarPapeles(cant)
+  fin
+  robot servidor
+  variables
+    id:numero cant:numero 
+  comenzar
+    repetir 150
+      tomarPapel
+    enviarIds
+    repetir 12
+      RecibirMensaje(id,*)
+      Random(cant,1,5)
+      BloquearEsquina(100,1)
+      Pos(100,1)
+      depositarPapeles(cant)
+      Pos(13,1)
+      LiberarEsquina(100,1)
+      si (id=1)
+        EnviarMensaje(cant,r1)
+      sino
+        si(id=2)
+          EnviarMensaje(cant,r2)
+        sino 
+          EnviarMensaje(cant,r3)
+  fin
+variables
+  r1,r2,r3:cliente
+  rS:servidor
+comenzar
+  AsignarArea(rS,areaC)
+  AsignarArea(rS,areaS)
+  AsignarArea(r1,area1)
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,area3)
+  AsignarArea(r3,areaC)
+  Iniciar(rS,13,1)
+  Iniciar(r1,10,1)
+  Iniciar(r2,11,1)
+  Iniciar(r3,12,1)
+fin

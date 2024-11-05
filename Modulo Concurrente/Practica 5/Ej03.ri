@@ -1,0 +1,90 @@
+programa Ej03
+procesos
+  proceso  juntarFlores (ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant+1
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso avanzarCalle
+  variables
+    miAv:numero miCa:numero esquinas:numero cant:numero ok:boolean
+  comenzar
+    mientras(PosAv < 100)
+      mientras ((cant < 10)&(esquinas<15))&(PosAv<100)
+        juntarFlores(cant)
+        esquinas:=esquinas+1
+        mover
+      juntarFlores(cant)
+      esquinas:=0 
+      cant:=0
+      miAv:=PosAv
+      miCa:=PosCa
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlores
+      Pos(miAv,miCa)
+      LiberarEsquina(10,10)
+      si (PosCa=3)
+        EnviarMensaje(1,rC)  
+        EnviarMensaje(V,rC)
+      sino
+        EnviarMensaje(2,rC)
+        EnviarMensaje(V,rC)
+  fin
+areas
+  area1: AreaP(1,3,100,3)
+  area2: AreaP(1,4,100,4)
+  areaC: AreaP(1,5,1,5)
+  areaCompartida: AreaP(10,10,10,10)
+robots
+  robot recolector
+  comenzar
+    derecha
+    avanzarCalle
+    si (PosCa=3)
+      EnviarMensaje(1,rC)
+      EnviarMensaje(F,rC)
+    sino
+      EnviarMensaje(2,rC)
+      EnviarMensaje(F,rC)     
+  fin
+  robot cosechador
+  variables
+    cant:numero terminar1,terminar2:boolean ok:numero
+  comenzar
+    terminar1:=V 
+    terminar2:=V
+    mientras (terminar1)|(terminar2)
+      repetir 2
+        RecibirMensaje(ok,*)   
+        si (ok=1)
+          RecibirMensaje(terminar1,r1)
+        sino
+          RecibirMensaje(terminar2,r2)  
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      juntarFlores(cant)
+      Pos(1,5) 
+      LiberarEsquina(10,10)  
+    Informar('cantFlores',cant)
+  fin
+variables
+  r1,r2:recolector
+  rC:cosechador
+comenzar
+  AsignarArea(rC,areaC)
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(rC,areaCompartida)
+  AsignarArea(r1,areaCompartida)
+  AsignarArea(r2,areaCompartida)
+  Iniciar(rC,1,5)
+  Iniciar(r1,1,3)
+  Iniciar(r2,1,4)
+fin

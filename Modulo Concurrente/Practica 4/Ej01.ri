@@ -1,0 +1,116 @@
+programa Ej01
+procesos
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1,c1)
+    EnviarMensaje(2,c2)
+    EnviarMensaje(3,c3)
+  fin
+  proceso juntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  
+areas
+  areaRServidor: AreaP (100,100,100,100)
+  areaSC1:AreaPC(1,1,1,100)
+  areaSC2:AreaPC(2,1,2,100)
+  areaSC3:AreaPC(3,1,3,100)
+robots
+  robot rServidor
+  variables
+    id:numero  
+    cantFlores:numero 
+    cb1,cb2,cb3:boolean
+    ca:numero 
+    av:numero
+  comenzar
+    cb1:=V
+    cb2:=V
+    cb3:=V
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    enviarIds
+    mientras ((cb1)|(cb2)|(cb3))
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(cantFlores,c1)
+        si (cantFlores <> 0)
+          RecibirMensaje(ca,c1)
+          RecibirMensaje(av,c1)
+          Pos(av,ca+1)
+          repetir cantFlores
+            depositarFlor
+          Pos(100,100)
+          EnviarMensaje(V,c1)
+        sino
+          cb1:= F
+      sino
+        si (id=2)
+          RecibirMensaje(cantFlores,c2)
+          si (cantFlores <> 0)
+            RecibirMensaje(ca,c2)
+            RecibirMensaje(av,c2)
+            Pos(av,ca+1)
+            repetir cantFlores
+              depositarFlor
+            Pos(100,100)
+            EnviarMensaje(V,c2)
+          sino
+            cb2:= F
+        sino
+          RecibirMensaje(cantFlores,c3)
+          si (cantFlores <> 0)
+            RecibirMensaje(ca,c3)
+            RecibirMensaje(av,c3)
+            Pos(av,ca+1)
+            repetir cantFlores
+              depositarFlor
+            Pos(100,100)
+            EnviarMensaje(V,c3)
+          sino
+            cb3:= F
+  fin
+  robot cliente
+  variables
+    id:numero av:numero ca:numero cant:numero dale:boolean
+  comenzar
+    RecibirMensaje(id,rS)
+    mientras(PosCa < 100)
+      Random(cant,1,4)
+      EnviarMensaje(id,rS)
+      EnviarMensaje(cant,rS)
+      ca:=PosCa
+      av:=PosAv
+      EnviarMensaje(ca,rS)
+      EnviarMensaje(av,rS)
+      RecibirMensaje(dale,rS)
+      Pos(av,ca+1)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+      Pos(av,ca)
+      mientras (PosCa<100)&(HayFlorEnLaBolsa)
+        depositarFlor
+        mover
+      si (HayFlorEnLaBolsa) & (PosCa=100)
+        depositarFlor
+    EnviarMensaje(id,rS)
+    EnviarMensaje(0,rS) 
+  fin        
+variables
+  c1,c2,c3:cliente
+  rS:rServidor
+comenzar 
+  AsignarArea(rS,areaRServidor)
+  AsignarArea(rS,areaSC1)
+  AsignarArea(rS,areaSC2)
+  AsignarArea(rS,areaSC3)
+  AsignarArea(c1,areaSC1)
+  AsignarArea(c2,areaSC2)
+  AsignarArea(c3,areaSC3)
+  Iniciar(rS,100,100)
+  Iniciar(c1,1,1)
+  Iniciar(c2,2,1)
+  Iniciar(c3,3,1)
+fin

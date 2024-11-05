@@ -1,0 +1,153 @@
+programa Ej02
+procesos
+  proceso juntarFlores (ES cantFlores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:= cantFlores + 1
+  fin
+  proceso juntarPapeles (ES cantPapeles:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cantPapeles:= cantPapeles + 1
+  fin
+  proceso recorridoR1 (ES cantFlores:numero; ES cant:numero)
+  comenzar
+    repetir 2
+      juntarFlores(cantFlores)
+      repetir cant
+        mover
+      juntarFlores(cantFlores)
+      derecha
+    cant := cant -1 
+    repetir 2
+      derecha  
+  fin
+  proceso recorridoR12 (ES cantFlores:numero)
+  variables
+    cantArriba:numero cantIzq:numero
+  comenzar
+    repetir 3
+      derecha 
+    mover
+    LiberarEsquina(16,16)
+    repetir 2 
+      mover
+    derecha
+    cantArriba := 2
+    cantIzq := 3
+    repetir 3
+      juntarFlores(cantFlores)
+      repetir cantArriba
+        mover
+      juntarFlores(cantFlores)
+      repetir 3
+        derecha
+      repetir cantIzq
+        mover
+      derecha
+      cantArriba:= cantArriba +1
+      cantIzq := cantIzq + 1 
+    repetir cantArriba
+      mover  
+    juntarFlores(cantFlores)
+  fin
+  proceso recorridoR2 (ES cantPapeles:numero; ES cant:numero) 
+  comenzar
+    repetir 2
+      juntarPapeles(cantPapeles)
+      repetir cant
+        mover
+      juntarPapeles(cantPapeles)
+      repetir 3
+        derecha
+    derecha
+    cant := cant -1
+    derecha
+  fin
+  proceso recorridoRobot2 (ES cantPapeles:numero)
+  variables
+    cantArriba:numero cantDer:numero 
+  comenzar
+    derecha
+    mover
+    LiberarEsquina(16,16)
+    repetir 2
+      mover
+    repetir 3 
+      derecha
+    cantArriba := 2
+    cantDer := 3
+    repetir 3
+      juntarPapeles(cantPapeles)
+      repetir cantArriba
+        mover
+      derecha
+      repetir cantDer
+        mover
+      juntarPapeles(cantPapeles)
+      repetir 3
+        derecha
+      cantArriba := cantArriba + 1
+      cantDer := cantDer + 1
+    repetir cantArriba 
+      mover
+  fin
+areas
+  areaR: AreaP(1,1,100,100)
+robots
+  robot robot1
+  variables
+    cantFlores:numero cant:numero
+  comenzar
+    cantFlores:=0 
+    cant:=5
+    repetir 5
+      recorridoR1(cantFlores,cant)
+      si (cant = 1)
+        BloquearEsquina(16,16)
+    EnviarMensaje(1,rJ)
+    recorridoR12(cantFlores)
+    EnviarMensaje(1,rJ)
+    Informar('cantFlores',cantFlores)
+  fin
+  robot robot2
+  variables
+    cantPapeles:numero cant:numero
+  comenzar
+    cant:=5
+    cantPapeles:=0
+    repetir 5
+      recorridoR2(cantPapeles,cant)
+      si (cant=1)
+        BloquearEsquina(16,16)
+    EnviarMensaje(2,rJ)
+    recorridoRobot2(cantPapeles)
+    EnviarMensaje(2,rJ)
+    Informar('cantPapeles',cantPapeles)
+  fin 
+  robot robotJefe
+  variables
+    quien:numero ganador:numero termine:numero
+  comenzar
+    RecibirMensaje(quien,*)
+    ganador:=quien
+    RecibirMensaje(quien,*)
+    RecibirMensaje(termine,*)
+    RecibirMensaje(termine,*)
+    Informar('ganador',ganador)
+  fin 
+variables  
+  r1:robot1
+  r2:robot2
+  rJ:robotJefe
+comenzar
+  AsignarArea(r1,areaR)
+  AsignarArea(r2,areaR)
+  AsignarArea(rJ,areaR)
+  Iniciar(rJ,15,1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,31,1)
+fin
+  
